@@ -35,7 +35,7 @@
             if (File.Exists(filePath))
             {
                 string content = File.ReadAllText(filePath);
-                FileContentLabel.Text = content;
+                FileContentLabel.Text = content + "\n\nPlik znajduje się w: " + filePath;
                 DisplayFlashcardsInConsole(content);
             }
             else
@@ -51,6 +51,20 @@
             {
                 File.AppendAllText(filePath, newFlashcard + Environment.NewLine);
                 OnLoadFileClicked(sender, e); // Odśwież zawartość pliku
+            }
+        }
+
+        private void OnRemoveFlashcardClicked(object sender, EventArgs e)
+        {
+            if (int.TryParse(RemoveFlashcardEntry.Text, out int lineNumber))
+            {
+                var lines = File.ReadAllLines(filePath).ToList();
+                if (lineNumber > 0 && lineNumber < lines.Count)
+                {
+                    lines.RemoveAt(lineNumber);
+                    File.WriteAllLines(filePath, lines);
+                    OnLoadFileClicked(sender, e); // Odśwież zawartość pliku
+                }
             }
         }
 

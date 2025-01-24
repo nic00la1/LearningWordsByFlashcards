@@ -11,6 +11,8 @@
         </ScrollView>
         <Entry x:Name="NewFlashcardEntry" Placeholder="Wpisz nową fiszkę" />
         <Button Text="Dodaj fiszkę" Clicked="OnAddFlashcardClicked" />
+        <Entry x:Name="RemoveFlashcardEntry" Placeholder="Wpisz numer fiszki do usunięcia" Keyboard="Numeric" />
+        <Button Text="Usuń fiszkę" Clicked="OnRemoveFlashcardClicked" />
     </StackLayout>
 
 </ContentPage>
