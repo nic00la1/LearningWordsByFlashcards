@@ -3,6 +3,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="LearningWordsByFlashcards.MainPage">
 
-   
+    <StackLayout>
+        <Label x:Name="FileContentLabel" Text="Zawartość pliku" />
+        <Button Text="Wczytaj plik" Clicked="OnLoadFileClicked" />
+        <Entry x:Name="NewTextEntry" Placeholder="Wpisz nowy tekst" />
+        <Button Text="Dodaj tekst" Clicked="OnAddTextClicked" />
+    </StackLayout>
 
 </ContentPage>
