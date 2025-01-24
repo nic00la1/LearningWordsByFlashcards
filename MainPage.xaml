@@ -3,11 +3,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="LearningWordsByFlashcards.MainPage">
 
-    <StackLayout>
-        <Label x:Name="FileContentLabel" Text="Zawartość pliku" />
-        <Button Text="Wczytaj plik" Clicked="OnLoadFileClicked" />
-        <Entry x:Name="NewTextEntry" Placeholder="Wpisz nowy tekst" />
-        <Button Text="Dodaj tekst" Clicked="OnAddTextClicked" />
+    <StackLayout Padding="10">
+        <Label Text="Fiszki do nauki języka" FontSize="Large" HorizontalOptions="Center" />
+        <Button Text="Wczytaj fiszki" Clicked="OnLoadFileClicked" />
+        <ScrollView>
+            <Label x:Name="FileContentLabel" Text="Zawartość pliku" />
+        </ScrollView>
+        <Entry x:Name="NewFlashcardEntry" Placeholder="Wpisz nową fiszkę" />
+        <Button Text="Dodaj fiszkę" Clicked="OnAddFlashcardClicked" />
     </StackLayout>
 
 </ContentPage>
