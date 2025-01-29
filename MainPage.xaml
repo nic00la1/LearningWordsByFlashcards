@@ -1,32 +1,20 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+﻿<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="LearningWordsByFlashcards.MainPage">
-    <ScrollView>
-        <StackLayout Padding="10">
-        
-            <Label Text="Fiszki do nauki języka" FontSize="Large" HorizontalOptions="Center" />
-            <Button Text="Wczytaj fiszki" Clicked="OnLoadFileClicked" />
-            <ScrollView>
-                <Label x:Name="FileContentLabel" Text="Zawartość pliku" />
-            </ScrollView>
-            <Entry x:Name="NewFlashcardEntry" Placeholder="Wpisz nową fiszkę" />
-            <Button Text="Dodaj fiszkę" Clicked="OnAddFlashcardClicked" />
-            <Entry x:Name="RemoveFlashcardEntry" Placeholder="Wpisz numer fiszki do usunięcia" Keyboard="Numeric" />
-            <Button Text="Usuń fiszkę" Clicked="OnRemoveFlashcardClicked" />
-            <Button Text="Rozpocznij naukę" Clicked="OnStartLearningClicked" />
-            <Picker x:Name="LanguagePicker">
-                <Picker.Items>
-                    <x:String>PL</x:String>
-                    <x:String>ENG</x:String>
-                </Picker.Items>
-            </Picker>
-            <Label x:Name="CurrentFlashcardLabel" Text="Aktualna fiszka" />
-            <Entry x:Name="AnswerEntry" Placeholder="Wpisz odpowiedź" />
-            <Button Text="Sprawdź odpowiedź" Clicked="OnCheckAnswerClicked" />
-            <Label x:Name="ScoreLabel" Text="Wynik" />
+
+    <StackLayout Padding="10">
+        <Label Text="Select Mode:" />
+        <Picker x:Name="modePicker">
+            <Picker.Items>
+                <x:String>Easy</x:String>
+                <x:String>Hard</x:String>
+            </Picker.Items>
+        </Picker>
+        <Button Text="Start Training" Clicked="OnStartTrainingClicked" />
+        <Label x:Name="flashcardLabel" FontSize="24" />
+        <Entry x:Name="answerEntry" Placeholder="Enter your answer" />
+        <Button Text="Submit" Clicked="OnSubmitClicked" />
+        <Label x:Name="resultLabel" FontSize="18" />
+        <Label x:Name="scoreLabel" FontSize="18" />
     </StackLayout>
-    </ScrollView>
-
-
 </ContentPage>

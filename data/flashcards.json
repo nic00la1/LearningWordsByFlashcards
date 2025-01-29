@@ -1,0 +1,70 @@
+{
+  "flashcards": [
+    {
+      "difficulty": "E",
+      "PL": ["jabłko"],
+      "ENG": ["apple"],
+      "description": "kulisty jadalny owoc spherical edible fruit"
+    },
+    {
+      "difficulty": "M",
+      "PL": ["samochód", "auto"],
+      "ENG": ["car", "auto", "automobile"],
+      "description": "powszechny czterokołowy pojazd"
+    },
+    {
+      "difficulty": "H",
+      "PL": ["Czyny mówią głośniej niż słowa"],
+      "ENG": ["Actions speak louder than words"],
+      "description": ""
+    },
+    {
+      "difficulty": "E",
+      "PL": ["dom"],
+      "ENG": ["house"],
+      "description": ""
+    },
+    {
+      "difficulty": "E",
+      "PL": ["pies"],
+      "ENG": ["dog"],
+      "description": ""
+    },
+    {
+      "difficulty": "E",
+      "PL": ["kot"],
+      "ENG": ["cat"],
+      "description": ""
+    },
+    {
+      "difficulty": "E",
+      "PL": ["książka"],
+      "ENG": ["book"],
+      "description": ""
+    },
+    {
+      "difficulty": "E",
+      "PL": ["stół"],
+      "ENG": ["table"],
+      "description": ""
+    },
+    {
+      "difficulty": "E",
+      "PL": ["krzesło"],
+      "ENG": ["chair"],
+      "description": ""
+    },
+    {
+      "difficulty": "E",
+      "PL": ["okno"],
+      "ENG": ["window"],
+      "description": ""
+    },
+    {
+      "difficulty": "E",
+      "PL": ["drzwi"],
+      "ENG": ["door"],
+      "description": ""
+    }
+  ]
+}
