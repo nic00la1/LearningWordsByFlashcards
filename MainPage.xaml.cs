@@ -17,12 +17,14 @@ public partial class MainPage : ContentPage
     private int currentFlashcardIndex;
     private int correctAnswers;
     private string currentMode;
+    private string selectedLanguage;
 
     public MainPage()
     {
         InitializeComponent();
         LoadFlashcards();
         LoadSettings();
+        resetButton.IsVisible = false; // Ukryj przycisk resetowania na początku
     }
 
     private void LoadFlashcards()
@@ -109,6 +111,15 @@ public partial class MainPage : ContentPage
             return;
         }
 
+        if (languagePicker == null || languagePicker.SelectedItem == null)
+        {
+            DisplayAlert("Wybierz język", "Language not selected.", "Ok");
+            return;
+        }
+
+        selectedLanguage = languagePicker.SelectedItem.ToString();
+        languagePicker.IsVisible = false; // Ukryj Picker po wybraniu języka
+
         currentMode = modePicker.SelectedItem?.ToString();
         if (string.IsNullOrEmpty(currentMode))
         {
@@ -127,14 +138,17 @@ public partial class MainPage : ContentPage
             currentFlashcardIndex < flashcards.Count)
         {
             Flashcard flashcard = flashcards[currentFlashcardIndex];
-            flashcardLabel.Text = currentMode == "Easy"
-                ? $"{flashcard.PL[0][0]} ({flashcard.PL[0].Length} letters)"
-                : flashcard.PL[0];
+            flashcardLabel.Text = selectedLanguage == "PL"
+                ? flashcard.PL[0]
+                : flashcard.ENG[0];
             answerEntry.Text = string.Empty;
             resultLabel.Text = string.Empty;
         } else
+        {
             scoreLabel.Text =
                 $"Score: {correctAnswers}/{settings.NumberOfFlashcards} ({correctAnswers / (double)settings.NumberOfFlashcards * 100}%)";
+            resetButton.IsVisible = true; // Pokaż przycisk resetowania
+        }
     }
 
     private void OnSubmitClicked(object sender, EventArgs e)
@@ -148,7 +162,7 @@ public partial class MainPage : ContentPage
         Flashcard flashcard = flashcards[currentFlashcardIndex];
         string answer = answerEntry.Text;
 
-        if (currentMode == "Easy")
+        if (selectedLanguage == "PL")
         {
             if (flashcard.ENG.Contains(answer))
             {
@@ -157,18 +171,15 @@ public partial class MainPage : ContentPage
             } else
                 resultLabel.Text =
                     $"Wrong! Correct answers: {string.Join(", ", flashcard.ENG)}";
-        } else if (currentMode == "Hard")
+        } else if (selectedLanguage == "ENG")
         {
-            List<string> answers =
-                answer.Split(",").Select(x => x.Trim()).ToList();
-            if (flashcard.ENG.All(answers.Contains) &&
-                answers.All(flashcard.ENG.Contains))
+            if (flashcard.PL.Contains(answer))
             {
                 correctAnswers++;
                 resultLabel.Text = "Correct!";
             } else
                 resultLabel.Text =
-                    $"Wrong! Correct answers: {string.Join(", ", flashcard.ENG)}";
+                    $"Wrong! Correct answers: {string.Join(", ", flashcard.PL)}";
         }
 
         currentFlashcardIndex++;
@@ -219,5 +230,16 @@ public partial class MainPage : ContentPage
         {
             Debug.WriteLine($"Error saving settings: {ex.Message}");
         }
+    }
+
+    private void OnResetTrainingClicked(object sender, EventArgs e)
+    {
+        languagePicker.IsVisible = true;
+        currentFlashcardIndex = 0;
+        correctAnswers = 0;
+        scoreLabel.Text = string.Empty;
+        flashcardLabel.Text = string.Empty;
+        answerEntry.Text = string.Empty;
+        resultLabel.Text = string.Empty;
     }
 }
