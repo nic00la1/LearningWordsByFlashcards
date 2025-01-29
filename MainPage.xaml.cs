@@ -28,6 +28,20 @@ public partial class MainPage : ContentPage
         resetButton.IsVisible = false; // Ukryj przycisk resetowania na początku
     }
 
+    private void ShuffleFlashcards()
+    {
+        Random rng = new();
+        int n = flashcards.Count;
+        while (n > 1)
+        {
+            n--;
+            int k = rng.Next(n + 1);
+            Flashcard value = flashcards[k];
+            flashcards[k] = flashcards[n];
+            flashcards[n] = value;
+        }
+    }
+
     private void LoadFlashcards()
     {
         try
@@ -140,6 +154,8 @@ public partial class MainPage : ContentPage
             Debug.WriteLine("No mode selected.");
             return;
         }
+
+        ShuffleFlashcards(); // Shuffle the flashcards before starting the training
 
         currentFlashcardIndex = 0;
         correctAnswers = 0;
