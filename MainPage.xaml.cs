@@ -19,6 +19,7 @@ public partial class MainPage : ContentPage
     private string currentMode;
     private string selectedLanguage;
     private bool isTrainingActive;
+    private int numberOfFlashcardsToPractice;
 
     public MainPage()
     {
@@ -26,6 +27,9 @@ public partial class MainPage : ContentPage
         LoadFlashcards();
         LoadSettings();
         resetButton.IsVisible = false; // Ukryj przycisk resetowania na początku
+        flashcardCountSlider.Maximum =
+            flashcards
+                .Count; // Set the maximum value of the slider to the number of flashcards
     }
 
     private void ShuffleFlashcards()
@@ -124,6 +128,11 @@ public partial class MainPage : ContentPage
         }
     }
 
+    private void OnSliderValueChanged(object sender, ValueChangedEventArgs e)
+    {
+        sliderValueLabel.Text = ((int)e.NewValue).ToString();
+    }
+
     private void OnStartTrainingClicked(object sender, EventArgs e)
     {
         if (isTrainingActive)
@@ -156,6 +165,9 @@ public partial class MainPage : ContentPage
         startTrainingButton.IsVisible =
             false; // Ukryj przycisk "Zacznij trening"
         chooseLevelLabel.IsVisible = false; // Ukryj etykietę "Wybierz poziom"
+        flashcardCountSlider.IsVisible = false; // Ukryj suwak
+        sliderTitleLabel.IsVisible = false;
+        sliderValueLabel.IsVisible = false; // Ukryj etykietę wartości suwaka
         welcomeLabel.Text = "Trening rozpoczęty"; // Zmień tekst etykiety
         answerEntry.IsVisible = true; // Pokaż pole do wpisywania odpowiedzi
         submitButton.IsVisible = true; // Pokaż przycisk "Zatwierdź"
@@ -167,6 +179,9 @@ public partial class MainPage : ContentPage
             return;
         }
 
+        numberOfFlashcardsToPractice =
+            (int)flashcardCountSlider
+                .Value; // Get the number of flashcards to practice
         ShuffleFlashcards(); // Shuffle the flashcards before starting the training
 
         currentFlashcardIndex = 0;
@@ -177,7 +192,7 @@ public partial class MainPage : ContentPage
 
     private async void ShowNextFlashcard()
     {
-        if (currentFlashcardIndex < settings.NumberOfFlashcards &&
+        if (currentFlashcardIndex < numberOfFlashcardsToPractice &&
             currentFlashcardIndex < flashcards.Count)
         {
             Flashcard flashcard = flashcards[currentFlashcardIndex];
@@ -212,10 +227,15 @@ public partial class MainPage : ContentPage
 
             answerEntry.Text = string.Empty;
             resultLabel.Text = string.Empty;
+
+            // Update the flashcard index label
+            flashcardIndexLabel.Text =
+                $"Fiszka {currentFlashcardIndex + 1} z {numberOfFlashcardsToPractice}";
+            flashcardIndexLabel.IsVisible = true;
         } else
         {
             scoreLabel.Text =
-                $"Score: {correctAnswers}/{settings.NumberOfFlashcards} ({correctAnswers / (double)settings.NumberOfFlashcards * 100}%)";
+                $"Score: {correctAnswers}/{numberOfFlashcardsToPractice} ({correctAnswers / (double)numberOfFlashcardsToPractice * 100}%)";
             resetButton.IsVisible = true; // Pokaż przycisk resetowania
             welcomeLabel.Text = "Zakończono trening!"; // Zmień tytuł
             flashcardLabel.Text = string.Empty; // Ukryj tekst fiszki
@@ -223,6 +243,7 @@ public partial class MainPage : ContentPage
             answerEntry.IsVisible =
                 false; // Ukryj pole do wpisywania odpowiedzi
             submitButton.IsVisible = false; // Ukryj przycisk "Zatwierdź"
+            flashcardIndexLabel.IsVisible = false; // Ukryj licznik fiszek
         }
     }
 
@@ -346,6 +367,9 @@ public partial class MainPage : ContentPage
         startTrainingButton.IsVisible =
             true; // Pokaż przycisk "Zacznij trening"
         chooseLevelLabel.IsVisible = true; // Pokaż etykietę "Wybierz poziom"
+        flashcardCountSlider.IsVisible = true; // Pokaż suwak
+        sliderValueLabel.IsVisible = true; // Pokaż etykietę wartości suwaka
+        sliderTitleLabel.IsVisible = true;
         welcomeLabel.Text =
             "Witaj w aplikacji Nicolingo!"; // Przywróć oryginalny tekst etykiety
         answerEntry.IsVisible = false; // Ukryj pole do wpisywania odpowiedzi

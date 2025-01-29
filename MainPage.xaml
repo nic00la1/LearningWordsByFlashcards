@@ -25,11 +25,23 @@
                     <x:String>Trudny</x:String>
                 </Picker.Items>
             </Picker>
+
+            <Label Text="Wybierz liczbę fiszek do przećwiczenia:" x:Name="sliderTitleLabel"/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Slider x:Name="flashcardCountSlider" Minimum="1" Maximum="10" Value="10" ValueChanged="OnSliderValueChanged" Grid.Column="0" />
+                <Label x:Name="sliderValueLabel" Text="10" Grid.Column="1" VerticalOptions="Center" />
+            </Grid>
+
             <Button x:Name="startTrainingButton" Text="Zacznij trening" Clicked="OnStartTrainingClicked" />
             <Label x:Name="flashcardLabel" FontSize="24" />
             <Label x:Name="hintLabel" FontSize="20" IsVisible="False" /> <!-- PODPOWIEDZI -->
             <Entry x:Name="answerEntry" Placeholder="Napisz swoją odpowiedź" IsVisible="False" />
             <Button x:Name="submitButton" Text="Zatwierdź" Clicked="OnSubmitClicked" IsVisible="False" />
+            <Label x:Name="flashcardIndexLabel" IsVisible="False" />
             <Label x:Name="resultLabel" FontSize="18" />
             <Label x:Name="scoreLabel" FontSize="18" />
             <Button x:Name="resetButton" Text="Reset Training" Clicked="OnResetTrainingClicked" IsVisible="False" />
