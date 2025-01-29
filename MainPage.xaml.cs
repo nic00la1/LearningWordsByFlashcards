@@ -153,9 +153,20 @@ public partial class MainPage : ContentPage
             currentFlashcardIndex < flashcards.Count)
         {
             Flashcard flashcard = flashcards[currentFlashcardIndex];
-            flashcardLabel.Text = selectedLanguage == "PL"
-                ? flashcard.PL[0]
-                : flashcard.ENG[0];
+            if (selectedLanguage == "PL")
+            {
+                flashcardLabel.Text = $"{flashcard.PL[0]}";
+                if (flashcard.PL.Count > 1)
+                    flashcardLabel.Text +=
+                        $" ({string.Join(", ", flashcard.PL.Skip(1))})";
+            } else
+            {
+                flashcardLabel.Text = $"{flashcard.ENG[0]}";
+                if (flashcard.ENG.Count > 1)
+                    flashcardLabel.Text +=
+                        $" ({string.Join(", ", flashcard.ENG.Skip(1))})";
+            }
+
             answerEntry.Text = string.Empty;
             resultLabel.Text = string.Empty;
         } else
