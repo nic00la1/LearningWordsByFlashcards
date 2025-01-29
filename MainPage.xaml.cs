@@ -18,6 +18,7 @@ public partial class MainPage : ContentPage
     private int correctAnswers;
     private string currentMode;
     private string selectedLanguage;
+    private bool isTrainingActive;
 
     public MainPage()
     {
@@ -99,6 +100,12 @@ public partial class MainPage : ContentPage
 
     private void OnStartTrainingClicked(object sender, EventArgs e)
     {
+        if (isTrainingActive)
+        {
+            Debug.WriteLine("Training is already active.");
+            return;
+        }
+
         if (flashcards == null || !flashcards.Any())
         {
             Debug.WriteLine("Flashcards are not loaded.");
@@ -119,6 +126,13 @@ public partial class MainPage : ContentPage
 
         selectedLanguage = languagePicker.SelectedItem.ToString();
         languagePicker.IsVisible = false; // Ukryj Picker po wybraniu języka
+        modePicker.IsVisible = false; // Ukryj Picker po wybraniu trybu
+        startTrainingButton.IsVisible =
+            false; // Ukryj przycisk "Zacznij trening"
+        chooseLevelLabel.IsVisible = false; // Ukryj etykietę "Wybierz poziom"
+        welcomeLabel.Text = "Trening rozpoczęty"; // Zmień tekst etykiety
+        answerEntry.IsVisible = true; // Pokaż pole do wpisywania odpowiedzi
+        submitButton.IsVisible = true; // Pokaż przycisk "Zatwierdź"
 
         currentMode = modePicker.SelectedItem?.ToString();
         if (string.IsNullOrEmpty(currentMode))
@@ -129,6 +143,7 @@ public partial class MainPage : ContentPage
 
         currentFlashcardIndex = 0;
         correctAnswers = 0;
+        isTrainingActive = true;
         ShowNextFlashcard();
     }
 
@@ -148,11 +163,22 @@ public partial class MainPage : ContentPage
             scoreLabel.Text =
                 $"Score: {correctAnswers}/{settings.NumberOfFlashcards} ({correctAnswers / (double)settings.NumberOfFlashcards * 100}%)";
             resetButton.IsVisible = true; // Pokaż przycisk resetowania
+            welcomeLabel.Text = "Zakończono trening!"; // Zmień tytuł
+            flashcardLabel.Text = string.Empty; // Ukryj tekst fiszki
+            answerEntry.IsVisible =
+                false; // Ukryj pole do wpisywania odpowiedzi
+            submitButton.IsVisible = false; // Ukryj przycisk "Zatwierdź"
         }
     }
 
     private void OnSubmitClicked(object sender, EventArgs e)
     {
+        if (!isTrainingActive)
+        {
+            Debug.WriteLine("Training is not active.");
+            return;
+        }
+
         if (currentFlashcardIndex >= flashcards.Count)
         {
             Debug.WriteLine("No more flashcards to show.");
@@ -235,11 +261,25 @@ public partial class MainPage : ContentPage
     private void OnResetTrainingClicked(object sender, EventArgs e)
     {
         languagePicker.IsVisible = true;
+        modePicker.IsVisible = true;
+        startTrainingButton.IsVisible =
+            true; // Pokaż przycisk "Zacznij trening"
+        chooseLevelLabel.IsVisible = true; // Pokaż etykietę "Wybierz poziom"
+        welcomeLabel.Text =
+            "Witaj w aplikacji Nicolingo!"; // Przywróć oryginalny tekst etykiety
+        answerEntry.IsVisible = false; // Ukryj pole do wpisywania odpowiedzi
+        submitButton.IsVisible = false; // Ukryj przycisk "Zatwierdź"
         currentFlashcardIndex = 0;
         correctAnswers = 0;
         scoreLabel.Text = string.Empty;
         flashcardLabel.Text = string.Empty;
         answerEntry.Text = string.Empty;
         resultLabel.Text = string.Empty;
+        resetButton.IsVisible = false;
+        isTrainingActive = false; // Zresetuj stan treningu
+
+        // Resetuj wybór języka początkowego i poziomu
+        languagePicker.SelectedIndex = -1;
+        modePicker.SelectedIndex = -1;
     }
 }
