@@ -42,6 +42,18 @@ public partial class MainPage : ContentPage
         }
     }
 
+    private string GenerateHint(string word)
+    {
+        return
+            $"{word[0]}{string.Join(" ", new string('_', word.Length - 1).ToCharArray())}";
+    }
+
+    private string GenerateSentenceHint(string sentence)
+    {
+        string[] words = sentence.Split(' ');
+        return string.Join("  ", words.Select(GenerateHint));
+    }
+
     private void LoadFlashcards()
     {
         try
@@ -163,7 +175,7 @@ public partial class MainPage : ContentPage
         ShowNextFlashcard();
     }
 
-    private void ShowNextFlashcard()
+    private async void ShowNextFlashcard()
     {
         if (currentFlashcardIndex < settings.NumberOfFlashcards &&
             currentFlashcardIndex < flashcards.Count)
@@ -183,6 +195,21 @@ public partial class MainPage : ContentPage
                         $" ({string.Join(", ", flashcard.ENG.Skip(1))})";
             }
 
+            if (currentMode == "Łatwy")
+            {
+                hintLabel.IsVisible = true;
+                if (selectedLanguage == "PL")
+                    hintLabel.Text = string.Join(", ",
+                        flashcard.ENG.Select(GenerateSentenceHint));
+                else
+                    hintLabel.Text = string.Join(", ",
+                        flashcard.PL.Select(GenerateSentenceHint));
+            } else
+            {
+                hintLabel.IsVisible = false;
+                hintLabel.Text = string.Empty;
+            }
+
             answerEntry.Text = string.Empty;
             resultLabel.Text = string.Empty;
         } else
@@ -192,13 +219,14 @@ public partial class MainPage : ContentPage
             resetButton.IsVisible = true; // Pokaż przycisk resetowania
             welcomeLabel.Text = "Zakończono trening!"; // Zmień tytuł
             flashcardLabel.Text = string.Empty; // Ukryj tekst fiszki
+            hintLabel.IsVisible = false; // Ukryj podpowiedzi
             answerEntry.IsVisible =
                 false; // Ukryj pole do wpisywania odpowiedzi
             submitButton.IsVisible = false; // Ukryj przycisk "Zatwierdź"
         }
     }
 
-    private void OnSubmitClicked(object sender, EventArgs e)
+    private async void OnSubmitClicked(object sender, EventArgs e)
     {
         if (!isTrainingActive)
         {
@@ -215,25 +243,51 @@ public partial class MainPage : ContentPage
         Flashcard flashcard = flashcards[currentFlashcardIndex];
         string answer = answerEntry.Text;
 
-        if (selectedLanguage == "PL")
+        if (currentMode == "Łatwy")
         {
-            if (flashcard.ENG.Contains(answer))
+            if (selectedLanguage == "PL")
+            {
+                if (flashcard.ENG.Contains(answer))
+                {
+                    correctAnswers++;
+                    resultLabel.Text = "Correct!";
+                } else
+                    resultLabel.Text =
+                        $"Wrong! Correct answers: {string.Join(", ", flashcard.ENG)}";
+            } else if (selectedLanguage == "ENG")
+            {
+                if (flashcard.PL.Contains(answer))
+                {
+                    correctAnswers++;
+                    resultLabel.Text = "Correct!";
+                } else
+                    resultLabel.Text =
+                        $"Wrong! Correct answers: {string.Join(", ", flashcard.PL)}";
+            }
+        } else if (currentMode == "Trudny")
+        {
+            List<string> answers =
+                answer.Split(',').Select(a => a.Trim()).ToList();
+            bool allCorrect = false;
+
+            if (selectedLanguage == "PL")
+                allCorrect = flashcard.ENG.All(e => answers.Contains(e)) &&
+                    answers.All(a => flashcard.ENG.Contains(a));
+            else if (selectedLanguage == "ENG")
+                allCorrect = flashcard.PL.All(p => answers.Contains(p)) &&
+                    answers.All(a => flashcard.PL.Contains(a));
+
+            if (allCorrect)
             {
                 correctAnswers++;
                 resultLabel.Text = "Correct!";
             } else
                 resultLabel.Text =
-                    $"Wrong! Correct answers: {string.Join(", ", flashcard.ENG)}";
-        } else if (selectedLanguage == "ENG")
-        {
-            if (flashcard.PL.Contains(answer))
-            {
-                correctAnswers++;
-                resultLabel.Text = "Correct!";
-            } else
-                resultLabel.Text =
-                    $"Wrong! Correct answers: {string.Join(", ", flashcard.PL)}";
+                    $"Wrong! Correct answers: {string.Join(", ", selectedLanguage == "PL" ? flashcard.ENG : flashcard.PL)}";
         }
+
+        await Task
+            .Delay(2000); // Delay for 2 seconds to show the correct answer
 
         currentFlashcardIndex++;
         ShowNextFlashcard();
@@ -300,6 +354,8 @@ public partial class MainPage : ContentPage
         correctAnswers = 0;
         scoreLabel.Text = string.Empty;
         flashcardLabel.Text = string.Empty;
+        hintLabel.Text = string.Empty;
+        hintLabel.IsVisible = false;
         answerEntry.Text = string.Empty;
         resultLabel.Text = string.Empty;
         resetButton.IsVisible = false;
