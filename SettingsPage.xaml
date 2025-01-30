@@ -15,9 +15,20 @@
         <Label Text="Show Description" />
         <Switch x:Name="showDescriptionSwitch" />
         <Label Text="Number of Flashcards" />
-        <Entry x:Name="numberOfFlashcardsEntry" Keyboard="Numeric" />
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Slider x:Name="numberOfFlashcardsSlider" ValueChanged="OnSliderValueChanged" Grid.Column="0" />
+            <Label x:Name="sliderValueLabel" Text="1" Grid.Column="1" VerticalOptions="Center" />
+        </Grid>
         <Label Text="Use Default Number of Flashcards" />
         <Switch x:Name="useDefaultNumberOfFlashcardsSwitch" />
+        <Label Text="Word Difficulty Levels" />
+        <Entry x:Name="wordDifficultyLevelsEntry" Placeholder="E,M,H" />
+        <Label Text="Flashcards File Name" />
+        <Entry x:Name="flashcardsFileNameEntry" Placeholder="{Binding FlashcardsFileName}" />
         <Button Text="Save" Clicked="OnSaveClicked" />
     </StackLayout>
 </ContentPage>

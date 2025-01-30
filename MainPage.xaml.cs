@@ -127,7 +127,8 @@ public partial class MainPage : ContentPage
 
     private async void OnSettingsClicked(object sender, EventArgs e)
     {
-        await Navigation.PushAsync(new SettingsPage(settings));
+        await Navigation.PushAsync(new SettingsPage(settings,
+            flashcards.Count));
     }
 
     private void OnStartTrainingClicked(object sender, EventArgs e)
@@ -159,7 +160,8 @@ public partial class MainPage : ContentPage
 
         numberOfFlashcardsToPractice = settings.UseDefaultNumberOfFlashcards
             ? settings.NumberOfFlashcards
-            : flashcards.Count;
+            : settings
+                .NumberOfFlashcards; // Always use the number of flashcards from settings
 
         ShuffleFlashcards();
         currentFlashcardIndex = 0;
