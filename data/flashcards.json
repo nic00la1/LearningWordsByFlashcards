@@ -4,67 +4,100 @@
       "difficulty": "E",
       "PL": ["jabłko"],
       "ENG": ["apple"],
-      "description": "kulisty jadalny owoc spherical edible fruit"
+      "hint": {
+        "PL": "kulisty jadalny owoc",
+        "ENG": "spherical edible fruit"
+      }
     },
     {
       "difficulty": "M",
       "PL": ["samochód", "auto"],
       "ENG": ["car", "auto", "automobile"],
-      "description": "powszechny czterokołowy pojazd"
+      "hint": {
+        "PL": "powszechny czterokołowy pojazd",
+        "ENG": "common four-wheeled vehicle"
+      }
     },
     {
       "difficulty": "H",
       "PL": ["Czyny mówią głośniej niż słowa"],
       "ENG": ["Actions speak louder than words"],
-      "description": ""
+      "hint": {
+        "PL": "",
+        "ENG": ""
+      }
     },
     {
       "difficulty": "E",
       "PL": ["dom"],
       "ENG": ["house"],
-      "description": ""
+      "hint": {
+        "PL": "budynek",
+        "ENG": "building"
+      }
     },
     {
       "difficulty": "E",
       "PL": ["pies"],
       "ENG": ["dog"],
-      "description": ""
+      "hint": {
+        "PL": "zwierzę",
+        "ENG": "animal"
+      }
     },
     {
       "difficulty": "E",
       "PL": ["kot"],
       "ENG": ["cat"],
-      "description": ""
+      "hint": {
+        "PL": "zwierzę",
+        "ENG": "animal"
+      }
     },
     {
       "difficulty": "E",
       "PL": ["książka"],
       "ENG": ["book"],
-      "description": ""
+      "hint": {
+        "PL": "przedmiot",
+        "ENG": "object"
+      }
     },
     {
       "difficulty": "E",
       "PL": ["stół"],
       "ENG": ["table"],
-      "description": ""
+      "hint": {
+        "PL": "mebel",
+        "ENG": "furniture"
+      }
     },
     {
       "difficulty": "E",
       "PL": ["krzesło"],
       "ENG": ["chair"],
-      "description": ""
+      "hint": {
+        "PL": "mebel",
+        "ENG": "furniture"
+      }
     },
     {
       "difficulty": "E",
       "PL": ["okno"],
       "ENG": ["window"],
-      "description": ""
+      "hint": {
+        "PL": "część budynku",
+        "ENG": "part of a building"
+      }
     },
     {
       "difficulty": "E",
       "PL": ["drzwi"],
       "ENG": ["door"],
-      "description": ""
+      "hint": {
+        "PL": "część budynku",
+        "ENG": "part of a building"
+      }
     }
   ]
 }

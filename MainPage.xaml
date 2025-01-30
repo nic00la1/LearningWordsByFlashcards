@@ -2,49 +2,55 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="LearningWordsByFlashcards.MainPage">
 
-    <ScrollView>
-        <StackLayout Padding="10">
-            <Label x:Name="welcomeLabel" Text="Witaj w aplikacji Nicolingo!" 
-                   FontSize="Title"
-                   Margin="0,0,0,20"/>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="70" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
 
-            <!-- Dodaj Picker do wyboru języka -->
-            <Picker x:Name="languagePicker" Title="Wybierz język początkowy">
-                <Picker.ItemsSource>
-                    <x:Array Type="{x:Type x:String}">
-                        <x:String>PL</x:String>
-                        <x:String>ENG</x:String>
-                    </x:Array>
-                </Picker.ItemsSource>
-            </Picker>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
 
-            <Label x:Name="chooseLevelLabel" Text="Wybierz poziom:" />
-            <Picker x:Name="modePicker">
-                <Picker.Items>
-                    <x:String>Łatwy</x:String>
-                    <x:String>Trudny</x:String>
-                </Picker.Items>
-            </Picker>
+        <!-- Tytuł i ikona zębatki w tym samym wierszu -->
+        <Label x:Name="welcomeLabel" Text="Witaj w aplikacji Nicolingo!" 
+               FontSize="Title"
+               Grid.Row="0"
+               Grid.Column="0"
+               VerticalOptions="Center"
+               Margin="10,0,0,0"/>
 
-            <Label Text="Wybierz liczbę fiszek do przećwiczenia:" x:Name="sliderTitleLabel"/>
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-                <Slider x:Name="flashcardCountSlider" Minimum="1" Maximum="10" Value="10" ValueChanged="OnSliderValueChanged" Grid.Column="0" />
-                <Label x:Name="sliderValueLabel" Text="10" Grid.Column="1" VerticalOptions="Center" />
-            </Grid>
+        <ImageButton Source="settings_icon.png"
+                     Grid.Row="0"
+                     Grid.Column="1"
+                     HorizontalOptions="End"
+                     VerticalOptions="Center"
+                     Clicked="OnSettingsClicked"
+                     Margin="10" />
 
-            <Button x:Name="startTrainingButton" Text="Zacznij trening" Clicked="OnStartTrainingClicked" />
-            <Label x:Name="flashcardLabel" FontSize="24" />
-            <Label x:Name="hintLabel" FontSize="20" IsVisible="False" /> <!-- PODPOWIEDZI -->
-            <Entry x:Name="answerEntry" Placeholder="Napisz swoją odpowiedź" IsVisible="False" />
-            <Button x:Name="submitButton" Text="Zatwierdź" Clicked="OnSubmitClicked" IsVisible="False" />
-            <Label x:Name="flashcardIndexLabel" IsVisible="False" />
-            <Label x:Name="resultLabel" FontSize="18" />
-            <Label x:Name="scoreLabel" FontSize="18" />
-            <Button x:Name="resetButton" Text="Reset Training" Clicked="OnResetTrainingClicked" IsVisible="False" />
-        </StackLayout>
-    </ScrollView>
+        <ScrollView Grid.Row="1" Grid.ColumnSpan="2">
+            <StackLayout Padding="10">
+                <!-- Dodaj Picker do wyboru języka -->
+                <Picker x:Name="languagePicker" Title="Wybierz język początkowy">
+                    <Picker.ItemsSource>
+                        <x:Array Type="{x:Type x:String}">
+                            <x:String>PL</x:String>
+                            <x:String>ENG</x:String>
+                        </x:Array>
+                    </Picker.ItemsSource>
+                </Picker>
+
+                <Button x:Name="startTrainingButton" Text="Zacznij trening" Clicked="OnStartTrainingClicked" />
+                <Label x:Name="flashcardLabel" FontSize="24" />
+                <Label x:Name="hintLabel" FontSize="20" IsVisible="False" /> <!-- PODPOWIEDZI -->
+                <Entry x:Name="answerEntry" Placeholder="Napisz swoją odpowiedź" IsVisible="False" />
+                <Button x:Name="submitButton" Text="Zatwierdź" Clicked="OnSubmitClicked" IsVisible="False" />
+                <Label x:Name="flashcardIndexLabel" IsVisible="False" />
+                <Label x:Name="resultLabel" FontSize="18" />
+                <Label x:Name="scoreLabel" FontSize="18" />
+                <Button x:Name="resetButton" Text="Reset Training" Clicked="OnResetTrainingClicked" IsVisible="False" />
+            </StackLayout>
+        </ScrollView>
+    </Grid>
 </ContentPage>

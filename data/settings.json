@@ -1,5 +1,5 @@
 {
-  "Difficulty": "E",
-  "NumberOfFlashcards": 5,
-  "ShowDescription": true
+  "DifficultyMode": "Easy", // Tryb łatwy lub trudny
+  "ShowDescription": true, // Czy opis ma się pokazywać
+  "WordDifficultyLevels": [ "E", "M", "H" ] // Poziom trudności wyrazów
 }

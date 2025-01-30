@@ -27,9 +27,6 @@ public partial class MainPage : ContentPage
         LoadFlashcards();
         LoadSettings();
         resetButton.IsVisible = false; // Ukryj przycisk resetowania na początku
-        flashcardCountSlider.Maximum =
-            flashcards
-                .Count; // Set the maximum value of the slider to the number of flashcards
     }
 
     private void ShuffleFlashcards()
@@ -128,9 +125,9 @@ public partial class MainPage : ContentPage
         }
     }
 
-    private void OnSliderValueChanged(object sender, ValueChangedEventArgs e)
+    private async void OnSettingsClicked(object sender, EventArgs e)
     {
-        sliderValueLabel.Text = ((int)e.NewValue).ToString();
+        await Navigation.PushAsync(new SettingsPage(settings));
     }
 
     private void OnStartTrainingClicked(object sender, EventArgs e)
@@ -147,12 +144,6 @@ public partial class MainPage : ContentPage
             return;
         }
 
-        if (modePicker == null)
-        {
-            Debug.WriteLine("modePicker is not initialized.");
-            return;
-        }
-
         if (languagePicker == null || languagePicker.SelectedItem == null)
         {
             DisplayAlert("Wybierz język", "Language not selected.", "Ok");
@@ -160,30 +151,17 @@ public partial class MainPage : ContentPage
         }
 
         selectedLanguage = languagePicker.SelectedItem.ToString();
-        languagePicker.IsVisible = false; // Ukryj Picker po wybraniu języka
-        modePicker.IsVisible = false; // Ukryj Picker po wybraniu trybu
-        startTrainingButton.IsVisible =
-            false; // Ukryj przycisk "Zacznij trening"
-        chooseLevelLabel.IsVisible = false; // Ukryj etykietę "Wybierz poziom"
-        flashcardCountSlider.IsVisible = false; // Ukryj suwak
-        sliderTitleLabel.IsVisible = false;
-        sliderValueLabel.IsVisible = false; // Ukryj etykietę wartości suwaka
-        welcomeLabel.Text = "Trening rozpoczęty"; // Zmień tekst etykiety
-        answerEntry.IsVisible = true; // Pokaż pole do wpisywania odpowiedzi
-        submitButton.IsVisible = true; // Pokaż przycisk "Zatwierdź"
+        languagePicker.IsVisible = false;
+        startTrainingButton.IsVisible = false;
+        welcomeLabel.Text = "Trening rozpoczęty";
+        answerEntry.IsVisible = true;
+        submitButton.IsVisible = true;
 
-        currentMode = modePicker.SelectedItem?.ToString();
-        if (string.IsNullOrEmpty(currentMode))
-        {
-            Debug.WriteLine("No mode selected.");
-            return;
-        }
+        numberOfFlashcardsToPractice = settings.UseDefaultNumberOfFlashcards
+            ? settings.NumberOfFlashcards
+            : flashcards.Count;
 
-        numberOfFlashcardsToPractice =
-            (int)flashcardCountSlider
-                .Value; // Get the number of flashcards to practice
-        ShuffleFlashcards(); // Shuffle the flashcards before starting the training
-
+        ShuffleFlashcards();
         currentFlashcardIndex = 0;
         correctAnswers = 0;
         isTrainingActive = true;
@@ -210,7 +188,7 @@ public partial class MainPage : ContentPage
                         $" ({string.Join(", ", flashcard.ENG.Skip(1))})";
             }
 
-            if (currentMode == "Łatwy")
+            if (settings.DifficultyMode == "Easy")
             {
                 hintLabel.IsVisible = true;
                 if (selectedLanguage == "PL")
@@ -264,7 +242,7 @@ public partial class MainPage : ContentPage
         Flashcard flashcard = flashcards[currentFlashcardIndex];
         string answer = answerEntry.Text;
 
-        if (currentMode == "Łatwy")
+        if (settings.DifficultyMode == "Easy")
         {
             if (selectedLanguage == "PL")
             {
@@ -285,7 +263,7 @@ public partial class MainPage : ContentPage
                     resultLabel.Text =
                         $"Wrong! Correct answers: {string.Join(", ", flashcard.PL)}";
             }
-        } else if (currentMode == "Trudny")
+        } else if (settings.DifficultyMode == "Hard")
         {
             List<string> answers =
                 answer.Split(',').Select(a => a.Trim()).ToList();
@@ -363,13 +341,8 @@ public partial class MainPage : ContentPage
     private void OnResetTrainingClicked(object sender, EventArgs e)
     {
         languagePicker.IsVisible = true;
-        modePicker.IsVisible = true;
         startTrainingButton.IsVisible =
             true; // Pokaż przycisk "Zacznij trening"
-        chooseLevelLabel.IsVisible = true; // Pokaż etykietę "Wybierz poziom"
-        flashcardCountSlider.IsVisible = true; // Pokaż suwak
-        sliderValueLabel.IsVisible = true; // Pokaż etykietę wartości suwaka
-        sliderTitleLabel.IsVisible = true;
         welcomeLabel.Text =
             "Witaj w aplikacji Nicolingo!"; // Przywróć oryginalny tekst etykiety
         answerEntry.IsVisible = false; // Ukryj pole do wpisywania odpowiedzi
@@ -385,8 +358,7 @@ public partial class MainPage : ContentPage
         resetButton.IsVisible = false;
         isTrainingActive = false; // Zresetuj stan treningu
 
-        // Resetuj wybór języka początkowego i poziomu
+        // Resetuj wybór języka początkowego
         languagePicker.SelectedIndex = -1;
-        modePicker.SelectedIndex = -1;
     }
 }
