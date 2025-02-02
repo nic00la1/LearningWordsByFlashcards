@@ -59,7 +59,7 @@
                 <Label x:Name="flashcardIndexLabel" IsVisible="False" />
                 <Label x:Name="resultLabel" FontSize="18" />
                 <Label x:Name="scoreLabel" FontSize="18" IsVisible="False" />
-                <Button x:Name="resetButton" Text="Reset Training" Clicked="OnResetTrainingClicked" IsVisible="False" />
+                <Button x:Name="resetButton" Text="Resetuj trening" Clicked="OnResetTrainingClicked" IsVisible="False" />
             </StackLayout>
         </ScrollView>
     </Grid>
