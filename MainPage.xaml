@@ -44,6 +44,7 @@
                 <Button x:Name="startTrainingButton" Text="Zacznij trening" Clicked="OnStartTrainingClicked" />
                 <Label x:Name="flashcardLabel" FontSize="24" />
                 <Label x:Name="hintLabel" FontSize="20" IsVisible="False" /> <!-- PODPOWIEDZI -->
+                <Label x:Name="descriptionLabel" FontSize="Small" HorizontalOptions="Center" IsVisible="False" /> 
                 <Entry x:Name="answerEntry" Placeholder="Napisz swoją odpowiedź" IsVisible="False" />
                 <Button x:Name="submitButton" Text="Zatwierdź" Clicked="OnSubmitClicked" IsVisible="False" />
                 <Label x:Name="flashcardIndexLabel" IsVisible="False" />

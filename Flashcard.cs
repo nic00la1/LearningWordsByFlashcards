@@ -8,5 +8,6 @@ public class Flashcard
 
     [JsonPropertyName("ENG")] public List<string> ENG { get; set; }
 
-    [JsonPropertyName("description")] public string Description { get; set; }
+    [JsonPropertyName("hint")]
+    public Dictionary<string, string> Hint { get; set; }
 }

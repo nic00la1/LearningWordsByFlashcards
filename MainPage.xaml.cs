@@ -205,6 +205,14 @@ public partial class MainPage : ContentPage
                 hintLabel.Text = string.Empty;
             }
 
+            if (settings.ShowDescription &&
+                flashcard.Hint.ContainsKey(selectedLanguage))
+            {
+                descriptionLabel.Text = flashcard.Hint[selectedLanguage];
+                descriptionLabel.IsVisible = true;
+            } else
+                descriptionLabel.IsVisible = false;
+
             answerEntry.Text = string.Empty;
             resultLabel.Text = string.Empty;
 
@@ -220,6 +228,7 @@ public partial class MainPage : ContentPage
             welcomeLabel.Text = "Zakończono trening!"; // Zmień tytuł
             flashcardLabel.Text = string.Empty; // Ukryj tekst fiszki
             hintLabel.IsVisible = false; // Ukryj podpowiedzi
+            descriptionLabel.IsVisible = false; // Ukryj opis
             answerEntry.IsVisible =
                 false; // Ukryj pole do wpisywania odpowiedzi
             submitButton.IsVisible = false; // Ukryj przycisk "Zatwierdź"
