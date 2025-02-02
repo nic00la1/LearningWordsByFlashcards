@@ -48,7 +48,7 @@
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
                     <Slider x:Name="numberOfFlashcardsSlider" ValueChanged="OnSliderValueChanged" Grid.Column="0" />
-                    <Label x:Name="sliderValueLabel" Grid.Column="1" VerticalOptions="Center" />
+                    <Label x:Name="sliderValueLabel" Grid.Column="1"  VerticalOptions="Center" />
                 </Grid>
                 <Button x:Name="startTrainingButton" Text="Zacznij trening" Clicked="OnStartTrainingClicked" />
                 <Label x:Name="flashcardLabel" FontSize="24" />

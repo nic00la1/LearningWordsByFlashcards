@@ -25,7 +25,7 @@
         <Label Text="Word Difficulty Levels" />
         <Entry x:Name="wordDifficultyLevelsEntry" Placeholder="E,M,H" />
         <Label Text="Flashcards File Name" />
-        <Entry x:Name="flashcardsFileNameEntry" Placeholder="{Binding FlashcardsFileName}" />
+        <Entry x:Name="flashcardsFileNameEntry" Placeholder="flashcards.json" IsEnabled="False"/>
         <Button Text="Save" Clicked="OnSaveClicked" />
     </StackLayout>
 </ContentPage>

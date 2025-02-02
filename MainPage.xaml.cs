@@ -136,15 +136,19 @@ public partial class MainPage : ContentPage
         // Ustaw wartość suwaka na podstawie ustawień
         if (settings.UseDefaultNumberOfFlashcards)
         {
+            // Sprawdź, czy NumberOfFlashcards jest większe od 0, jeśli nie, ustaw domyślną wartość
+            if (settings.NumberOfFlashcards <= 0)
+                settings.NumberOfFlashcards =
+                    10; // Ustaw domyślną wartość, np. 10
             numberOfFlashcardsSlider.Value = settings.NumberOfFlashcards;
             numberOfFlashcardsSlider.IsVisible = false;
             sliderValueLabel.IsVisible = false;
             numberOfFlashcardsLabel.IsVisible = false; // Ukryj etykietę suwaka
         } else
         {
-            numberOfFlashcardsSlider.Value =
-                settings
-                    .NumberOfFlashcards; // Ustaw wartość suwaka na ostatnio wybraną liczbę fiszek
+            numberOfFlashcardsSlider.Value = settings.NumberOfFlashcards > 0
+                ? settings.NumberOfFlashcards
+                : 10; // Ustaw domyślną wartość, jeśli jest 0
             numberOfFlashcardsSlider.IsVisible = true;
             sliderValueLabel.IsVisible = true;
             numberOfFlashcardsLabel.IsVisible = true; // Pokaż etykietę suwaka
@@ -197,11 +201,21 @@ public partial class MainPage : ContentPage
 
         // Użyj domyślnej liczby fiszek, jeśli jest określona w ustawieniach
         if (settings.UseDefaultNumberOfFlashcards)
-            numberOfFlashcardsToPractice = Math.Min(settings.NumberOfFlashcards,
-                filteredFlashcards.Count);
+            numberOfFlashcardsToPractice = Math.Min(
+                settings.NumberOfFlashcards > 0
+                    ? settings.NumberOfFlashcards
+                    : 10, filteredFlashcards.Count);
         else
             numberOfFlashcardsToPractice = Math.Min(
                 (int)numberOfFlashcardsSlider.Value, filteredFlashcards.Count);
+
+        // Sprawdź, czy liczba fiszek do praktyki jest większa od 0
+        if (numberOfFlashcardsToPractice <= 0)
+        {
+            DisplayAlert("Błąd",
+                "Liczba fiszek do praktyki musi być większa od 0.", "Ok");
+            return;
+        }
 
         // Ukryj suwak i jego etykietę
         numberOfFlashcardsSlider.IsVisible = false;

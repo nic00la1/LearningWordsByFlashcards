@@ -18,9 +18,6 @@ public partial class SettingsPage : ContentPage
             settings.UseDefaultNumberOfFlashcards;
         wordDifficultyLevelsEntry.Text = string.Join(",",
             settings.WordDifficultyLevels ?? new List<string>());
-        flashcardsFileNameEntry.Text = settings.FlashcardsFileName;
-        flashcardsFileNameEntry.Placeholder =
-            settings.FlashcardsFileName; // Set the placeholder
     }
 
     private async void OnSaveClicked(object sender, EventArgs e)
@@ -39,7 +36,6 @@ public partial class SettingsPage : ContentPage
             useDefaultNumberOfFlashcardsSwitch.IsToggled;
         settings.WordDifficultyLevels = wordDifficultyLevelsEntry.Text
             .Split(',').Select(s => s.Trim()).ToList();
-        settings.FlashcardsFileName = flashcardsFileNameEntry.Text;
 
         // Save settings
         string filePath =
