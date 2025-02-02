@@ -29,6 +29,7 @@ public partial class MainPage : ContentPage
         ApplySettings();
         resetButton.IsVisible = false; // Ukryj przycisk resetowania na początku
         scoreLabel.IsVisible = false; // Ukryj etykietę wyniku na początku
+        flashcardLabel.IsVisible = true;
     }
 
     private void ShuffleFlashcards()

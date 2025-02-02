@@ -23,7 +23,7 @@
         <Label Text="Uzywaj standardowej ilosci fiszek" />
         <Switch x:Name="useDefaultNumberOfFlashcardsSwitch" />
         <Label Text="Slowne poziomy trudnosci" />
-        <Entry x:Name="wordDifficultyLevelsEntry" Placeholder="E,M,H" />
+        <Entry x:Name="wordDifficultyLevelsEntry" Placeholder="E,M,H" TextColor="White"/>
         <Label Text="Nazwa pliku z fiszkami" />
         <Entry x:Name="flashcardsFileNameEntry" Placeholder="flashcards.json" IsEnabled="False"/>
         <Button Text="Zapisz" Clicked="OnSaveClicked" />

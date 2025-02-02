@@ -1,10 +1,11 @@
 ﻿<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="LearningWordsByFlashcards.MainPage">
+             x:Class="LearningWordsByFlashcards.MainPage"
+             BackgroundColor="White">
 
-    <Grid>
+    <Grid Padding="20">
         <Grid.RowDefinitions>
-            <RowDefinition Height="70" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
@@ -16,6 +17,8 @@
         <!-- Tytuł i ikona zębatki w tym samym wierszu -->
         <Label x:Name="welcomeLabel" Text="Witaj w aplikacji Nicolingo!" 
                FontSize="Title"
+               FontAttributes="Bold"
+               TextColor="DarkBlue"
                Grid.Row="0"
                Grid.Column="0"
                VerticalOptions="Center"
@@ -27,12 +30,15 @@
                      HorizontalOptions="End"
                      VerticalOptions="Center"
                      Clicked="OnSettingsClicked"
+                     WidthRequest="30"
                      Margin="10" />
 
         <ScrollView Grid.Row="1" Grid.ColumnSpan="2">
-            <StackLayout Padding="10">
+            <StackLayout Spacing="20" Padding="10">
                 <!-- Dodaj Picker do wyboru języka -->
-                <Picker x:Name="languagePicker" Title="Wybierz język początkowy">
+                <Picker x:Name="languagePicker" Title="Wybierz język początkowy" TitleColor="DimGray"
+                        BackgroundColor="LightGray"
+                        Margin="0,10,0,0">
                     <Picker.ItemsSource>
                         <x:Array Type="{x:Type x:String}">
                             <x:String>PL</x:String>
@@ -41,25 +47,57 @@
                     </Picker.ItemsSource>
                 </Picker>
 
-                <Label Text="Number of Flashcards" x:Name="numberOfFlashcardsLabel"/>
+                <Label Text="Liczba fiszek" x:Name="numberOfFlashcardsLabel"
+                       FontSize="Medium"
+                       TextColor="DarkBlue"/>
+
+                <Label x:Name="sliderValueLabel" HorizontalOptions="Center" TextColor="#1E90FF" Margin="0,0,0,-20"/>
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
                     <Slider x:Name="numberOfFlashcardsSlider" ValueChanged="OnSliderValueChanged" Grid.Column="0" />
-                    <Label x:Name="sliderValueLabel" Grid.Column="1"  VerticalOptions="Center" />
                 </Grid>
-                <Button x:Name="startTrainingButton" Text="Zacznij trening" Clicked="OnStartTrainingClicked" />
-                <Label x:Name="flashcardLabel" FontSize="24" />
-                <Label x:Name="hintLabel" FontSize="20" IsVisible="False" /> <!-- PODPOWIEDZI -->
-                <Label x:Name="descriptionLabel" FontSize="Small" HorizontalOptions="Center" IsVisible="False" /> 
-                <Entry x:Name="answerEntry" Placeholder="Napisz swoją odpowiedź" IsVisible="False" />
-                <Button x:Name="submitButton" Text="Zatwierdź" Clicked="OnSubmitClicked" IsVisible="False" />
-                <Label x:Name="flashcardIndexLabel" IsVisible="False" />
-                <Label x:Name="resultLabel" FontSize="18" />
-                <Label x:Name="scoreLabel" FontSize="18" IsVisible="False" />
-                <Button x:Name="resetButton" Text="Resetuj trening" Clicked="OnResetTrainingClicked" IsVisible="False" />
+
+                <Button x:Name="startTrainingButton" Text="Zacznij trening"
+                        BackgroundColor="DarkBlue"
+                        TextColor="White"
+                        FontAttributes="Bold"
+                        CornerRadius="10"
+                        Clicked="OnStartTrainingClicked" />
+
+                <Frame BackgroundColor="LightGray" CornerRadius="10" Padding="10" IsVisible="False">
+                    <Label x:Name="flashcardLabel" FontSize="24" TextColor="DarkBlue" />
+                </Frame>
+
+                <Label x:Name="hintLabel" FontSize="20" TextColor="Gray" IsVisible="False" />
+
+                <Label x:Name="descriptionLabel" FontSize="Small" TextColor="DarkBlue" HorizontalOptions="Center" IsVisible="False" />
+
+                <Entry x:Name="answerEntry" Placeholder="Napisz swoją odpowiedź" IsVisible="False"
+                       BackgroundColor="LightGray"
+                       Margin="0,10,0,0"/>
+
+                <Button x:Name="submitButton" Text="Zatwierdź" Clicked="OnSubmitClicked" IsVisible="False"
+                        BackgroundColor="DarkBlue"
+                        TextColor="White"
+                        FontAttributes="Bold"
+                        CornerRadius="10"
+                        Margin="0,10,0,0"/>
+
+                <Label x:Name="flashcardIndexLabel" IsVisible="False" FontSize="Medium" TextColor="DarkBlue" />
+
+                <Label x:Name="resultLabel" FontSize="18" TextColor="DarkBlue" />
+
+                <Label x:Name="scoreLabel" FontSize="18" TextColor="DarkBlue" IsVisible="False" />
+
+                <Button x:Name="resetButton" Text="Resetuj trening" Clicked="OnResetTrainingClicked" IsVisible="False"
+                        BackgroundColor="DarkBlue"
+                        TextColor="White"
+                        FontAttributes="Bold"
+                        CornerRadius="10"
+                        Margin="0,10,0,0"/>
             </StackLayout>
         </ScrollView>
     </Grid>
