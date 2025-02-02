@@ -61,43 +61,43 @@ public partial class MainPage : ContentPage
     {
         try
         {
-            Debug.WriteLine("Attempting to load flashcards.json...");
             string filePath = Path.Combine(FileSystem.AppDataDirectory,
                 "flashcards.json");
-            Debug.WriteLine($"flashcards.json path: {filePath}");
 
             if (!File.Exists(filePath))
             {
-                Debug.WriteLine("flashcards.json file does not exist.");
+                DisplayAlert("Błąd", "Plik flashcards.json nie istnieje.",
+                    "OK");
                 flashcards = new List<Flashcard>();
                 return;
             }
 
             using StreamReader reader = new(filePath);
             string json = reader.ReadToEnd();
-            Debug.WriteLine($"flashcards.json content: {json}");
             FlashcardsContainer? flashcardsContainer =
                 JsonSerializer.Deserialize<FlashcardsContainer>(json);
             if (flashcardsContainer != null &&
                 flashcardsContainer.Flashcards != null)
             {
                 flashcards = flashcardsContainer.Flashcards;
-                Debug.WriteLine("Flashcards successfully loaded.");
-                Debug.WriteLine($"Loaded {flashcards.Count} flashcards.");
+                DisplayAlert("Sukces", $"Załadowano {flashcards.Count} fiszek.",
+                    "OK");
 
                 // Ustaw minimalną i maksymalną wartość suwaka
                 numberOfFlashcardsSlider.Minimum = 1;
                 numberOfFlashcardsSlider.Maximum = flashcards.Count;
             } else
             {
-                Debug.WriteLine(
-                    "Failed to deserialize flashcards.json or flashcards are null.");
+                DisplayAlert("Błąd",
+                    "Nie udało się zdeserializować flashcards.json lub fiszki są puste.",
+                    "OK");
                 flashcards = new List<Flashcard>();
             }
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"Error loading flashcards: {ex.Message}");
+            DisplayAlert("Błąd", $"Błąd podczas ładowania fiszek: {ex.Message}",
+                "OK");
             flashcards = new List<Flashcard>();
         }
     }
@@ -106,27 +106,25 @@ public partial class MainPage : ContentPage
     {
         try
         {
-            Debug.WriteLine("Attempting to load settings.json...");
             string filePath = Path.Combine(FileSystem.AppDataDirectory,
                 "settings.json");
-            Debug.WriteLine($"settings.json path: {filePath}");
 
             if (!File.Exists(filePath))
             {
-                Debug.WriteLine("settings.json file does not exist.");
+                DisplayAlert("Błąd", "Plik settings.json nie istnieje.", "OK");
                 settings = new Settings();
                 return;
             }
 
             using StreamReader reader = new(filePath);
             string json = reader.ReadToEnd();
-            Debug.WriteLine($"settings.json content: {json}");
             settings = JsonSerializer.Deserialize<Settings>(json);
-            Debug.WriteLine("Settings successfully loaded.");
+            DisplayAlert("Sukces", "Ustawienia zostały załadowane.", "OK");
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"Error loading settings: {ex.Message}");
+            DisplayAlert("Błąd",
+                $"Błąd podczas ładowania ustawień: {ex.Message}", "OK");
             settings = new Settings();
         }
     }
@@ -171,19 +169,19 @@ public partial class MainPage : ContentPage
     {
         if (isTrainingActive)
         {
-            Debug.WriteLine("Training is already active.");
+            DisplayAlert("Błąd", "Trening jest już aktywny.", "OK");
             return;
         }
 
         if (flashcards == null || !flashcards.Any())
         {
-            Debug.WriteLine("Flashcards are not loaded.");
+            DisplayAlert("Błąd", "Fiszki nie zostały załadowane.", "OK");
             return;
         }
 
         if (languagePicker == null || languagePicker.SelectedItem == null)
         {
-            DisplayAlert("Wybierz język", "Language not selected.", "Ok");
+            DisplayAlert("Błąd", "Nie wybrano języka.", "OK");
             return;
         }
 
@@ -213,7 +211,7 @@ public partial class MainPage : ContentPage
         if (numberOfFlashcardsToPractice <= 0)
         {
             DisplayAlert("Błąd",
-                "Liczba fiszek do praktyki musi być większa od 0.", "Ok");
+                "Liczba fiszek do praktyki musi być większa od 0.", "OK");
             return;
         }
 
@@ -282,7 +280,7 @@ public partial class MainPage : ContentPage
         } else
         {
             scoreLabel.Text =
-                $"Score: {correctAnswers}/{numberOfFlashcardsToPractice} ({correctAnswers / (double)numberOfFlashcardsToPractice * 100}%)";
+                $"Wynik: {correctAnswers}/{numberOfFlashcardsToPractice} ({correctAnswers / (double)numberOfFlashcardsToPractice * 100}%)";
             scoreLabel.IsVisible = true; // Pokaż etykietę wyniku
             resetButton.IsVisible = true; // Pokaż przycisk resetowania
             welcomeLabel.Text = "Zakończono trening!"; // Zmień tytuł
@@ -300,13 +298,13 @@ public partial class MainPage : ContentPage
     {
         if (!isTrainingActive)
         {
-            Debug.WriteLine("Training is not active.");
+            DisplayAlert("Błąd", "Trening nie jest aktywny.", "OK");
             return;
         }
 
         if (currentFlashcardIndex >= filteredFlashcards.Count)
         {
-            Debug.WriteLine("No more flashcards to show.");
+            DisplayAlert("Błąd", "Brak więcej fiszek do pokazania.", "OK");
             return;
         }
 
@@ -320,19 +318,19 @@ public partial class MainPage : ContentPage
                 if (flashcard.ENG.Contains(answer))
                 {
                     correctAnswers++;
-                    resultLabel.Text = "Correct!";
+                    resultLabel.Text = "Poprawnie!";
                 } else
                     resultLabel.Text =
-                        $"Wrong! Correct answers: {string.Join(", ", flashcard.ENG)}";
+                        $"Błędnie! Poprawne odpowiedzi: {string.Join(", ", flashcard.ENG)}";
             } else if (selectedLanguage == "ENG")
             {
                 if (flashcard.PL.Contains(answer))
                 {
                     correctAnswers++;
-                    resultLabel.Text = "Correct!";
+                    resultLabel.Text = "Poprawnie!";
                 } else
                     resultLabel.Text =
-                        $"Wrong! Correct answers: {string.Join(", ", flashcard.PL)}";
+                        $"Błędnie! Poprawne odpowiedzi: {string.Join(", ", flashcard.PL)}";
             }
         } else if (settings.DifficultyMode == "Hard")
         {
@@ -350,10 +348,10 @@ public partial class MainPage : ContentPage
             if (allCorrect)
             {
                 correctAnswers++;
-                resultLabel.Text = "Correct!";
+                resultLabel.Text = "Poprawnie!";
             } else
                 resultLabel.Text =
-                    $"Wrong! Correct answers: {string.Join(", ", selectedLanguage == "PL" ? flashcard.ENG : flashcard.PL)}";
+                    $"Błędnie! Poprawne odpowiedzi: {string.Join(", ", selectedLanguage == "PL" ? flashcard.ENG : flashcard.PL)}";
         }
 
         await Task
