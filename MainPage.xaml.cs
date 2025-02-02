@@ -83,6 +83,10 @@ public partial class MainPage : ContentPage
                 flashcards = flashcardsContainer.Flashcards;
                 Debug.WriteLine("Flashcards successfully loaded.");
                 Debug.WriteLine($"Loaded {flashcards.Count} flashcards.");
+
+                // Ustaw minimalną i maksymalną wartość suwaka
+                numberOfFlashcardsSlider.Minimum = 1;
+                numberOfFlashcardsSlider.Maximum = flashcards.Count;
             } else
             {
                 Debug.WriteLine(
@@ -137,6 +141,9 @@ public partial class MainPage : ContentPage
             numberOfFlashcardsLabel.IsVisible = false; // Ukryj etykietę suwaka
         } else
         {
+            numberOfFlashcardsSlider.Value =
+                settings
+                    .NumberOfFlashcards; // Ustaw wartość suwaka na ostatnio wybraną liczbę fiszek
             numberOfFlashcardsSlider.IsVisible = true;
             sliderValueLabel.IsVisible = true;
             numberOfFlashcardsLabel.IsVisible = true; // Pokaż etykietę suwaka
