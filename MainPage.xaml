@@ -67,7 +67,7 @@
                         CornerRadius="10"
                         Clicked="OnStartTrainingClicked" />
 
-                <Frame BackgroundColor="LightGray" CornerRadius="10" Padding="10" IsVisible="False">
+                <Frame BackgroundColor="LightGray" CornerRadius="10" Padding="10" IsVisible="True">
                     <Label x:Name="flashcardLabel" FontSize="24" TextColor="DarkBlue" />
                 </Frame>
 
