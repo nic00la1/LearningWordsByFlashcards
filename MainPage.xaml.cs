@@ -13,6 +13,7 @@ namespace LearningWordsByFlashcards;
 public partial class MainPage : ContentPage
 {
     private List<Flashcard> flashcards = new();
+    private List<Flashcard> filteredFlashcards = new();
     private Settings settings = new();
     private int currentFlashcardIndex;
     private int correctAnswers;
@@ -33,14 +34,14 @@ public partial class MainPage : ContentPage
     private void ShuffleFlashcards()
     {
         Random rng = new();
-        int n = flashcards.Count;
+        int n = filteredFlashcards.Count;
         while (n > 1)
         {
             n--;
             int k = rng.Next(n + 1);
-            Flashcard value = flashcards[k];
-            flashcards[k] = flashcards[n];
-            flashcards[n] = value;
+            Flashcard value = filteredFlashcards[k];
+            filteredFlashcards[k] = filteredFlashcards[n];
+            filteredFlashcards[n] = value;
         }
     }
 
@@ -189,11 +190,18 @@ public partial class MainPage : ContentPage
         answerEntry.IsVisible = true;
         submitButton.IsVisible = true;
 
+        // Filtrowanie fiszek na podstawie poziomu trudności
+        filteredFlashcards = flashcards
+            .Where(f => settings.WordDifficultyLevels.Contains(f.Difficulty))
+            .ToList();
+
         // Użyj domyślnej liczby fiszek, jeśli jest określona w ustawieniach
         if (settings.UseDefaultNumberOfFlashcards)
-            numberOfFlashcardsToPractice = settings.NumberOfFlashcards;
+            numberOfFlashcardsToPractice = Math.Min(settings.NumberOfFlashcards,
+                filteredFlashcards.Count);
         else
-            numberOfFlashcardsToPractice = (int)numberOfFlashcardsSlider.Value;
+            numberOfFlashcardsToPractice = Math.Min(
+                (int)numberOfFlashcardsSlider.Value, filteredFlashcards.Count);
 
         // Ukryj suwak i jego etykietę
         numberOfFlashcardsSlider.IsVisible = false;
@@ -210,9 +218,9 @@ public partial class MainPage : ContentPage
     private async void ShowNextFlashcard()
     {
         if (currentFlashcardIndex < numberOfFlashcardsToPractice &&
-            currentFlashcardIndex < flashcards.Count)
+            currentFlashcardIndex < filteredFlashcards.Count)
         {
-            Flashcard flashcard = flashcards[currentFlashcardIndex];
+            Flashcard flashcard = filteredFlashcards[currentFlashcardIndex];
             if (selectedLanguage == "PL")
             {
                 flashcardLabel.Text = $"{flashcard.PL[0]}";
@@ -282,13 +290,13 @@ public partial class MainPage : ContentPage
             return;
         }
 
-        if (currentFlashcardIndex >= flashcards.Count)
+        if (currentFlashcardIndex >= filteredFlashcards.Count)
         {
             Debug.WriteLine("No more flashcards to show.");
             return;
         }
 
-        Flashcard flashcard = flashcards[currentFlashcardIndex];
+        Flashcard flashcard = filteredFlashcards[currentFlashcardIndex];
         string answer = answerEntry.Text;
 
         if (settings.DifficultyMode == "Easy")
