@@ -16,7 +16,6 @@ public partial class MainPage : ContentPage
     private Settings settings = new();
     private int currentFlashcardIndex;
     private int correctAnswers;
-    private string currentMode;
     private string selectedLanguage;
     private bool isTrainingActive;
     private int numberOfFlashcardsToPractice;
@@ -26,7 +25,9 @@ public partial class MainPage : ContentPage
         InitializeComponent();
         LoadFlashcards();
         LoadSettings();
+        ApplySettings();
         resetButton.IsVisible = false; // Ukryj przycisk resetowania na początku
+        scoreLabel.IsVisible = false; // Ukryj etykietę wyniku na początku
     }
 
     private void ShuffleFlashcards()
@@ -125,10 +126,33 @@ public partial class MainPage : ContentPage
         }
     }
 
+    public void ApplySettings()
+    {
+        // Ustaw wartość suwaka na podstawie ustawień
+        if (settings.UseDefaultNumberOfFlashcards)
+        {
+            numberOfFlashcardsSlider.Value = settings.NumberOfFlashcards;
+            numberOfFlashcardsSlider.IsVisible = false;
+            sliderValueLabel.IsVisible = false;
+            numberOfFlashcardsLabel.IsVisible = false; // Ukryj etykietę suwaka
+        } else
+        {
+            numberOfFlashcardsSlider.IsVisible = true;
+            sliderValueLabel.IsVisible = true;
+            numberOfFlashcardsLabel.IsVisible = true; // Pokaż etykietę suwaka
+        }
+    }
+
     private async void OnSettingsClicked(object sender, EventArgs e)
     {
-        await Navigation.PushAsync(new SettingsPage(settings,
-            flashcards.Count));
+        SettingsPage settingsPage = new(settings, flashcards.Count);
+        settingsPage.MainPage = this; // Ustaw referencję do MainPage
+        await Navigation.PushAsync(settingsPage);
+    }
+
+    private void OnSliderValueChanged(object sender, ValueChangedEventArgs e)
+    {
+        sliderValueLabel.Text = ((int)e.NewValue).ToString();
     }
 
     private void OnStartTrainingClicked(object sender, EventArgs e)
@@ -158,10 +182,16 @@ public partial class MainPage : ContentPage
         answerEntry.IsVisible = true;
         submitButton.IsVisible = true;
 
-        numberOfFlashcardsToPractice = settings.UseDefaultNumberOfFlashcards
-            ? settings.NumberOfFlashcards
-            : settings
-                .NumberOfFlashcards; // Always use the number of flashcards from settings
+        // Użyj domyślnej liczby fiszek, jeśli jest określona w ustawieniach
+        if (settings.UseDefaultNumberOfFlashcards)
+            numberOfFlashcardsToPractice = settings.NumberOfFlashcards;
+        else
+            numberOfFlashcardsToPractice = (int)numberOfFlashcardsSlider.Value;
+
+        // Ukryj suwak i jego etykietę
+        numberOfFlashcardsSlider.IsVisible = false;
+        sliderValueLabel.IsVisible = false;
+        numberOfFlashcardsLabel.IsVisible = false; // Ukryj etykietę suwaka
 
         ShuffleFlashcards();
         currentFlashcardIndex = 0;
@@ -216,7 +246,7 @@ public partial class MainPage : ContentPage
             answerEntry.Text = string.Empty;
             resultLabel.Text = string.Empty;
 
-            // Update the flashcard index label
+            // Zaktualizuj etykietę indeksu fiszki
             flashcardIndexLabel.Text =
                 $"Fiszka {currentFlashcardIndex + 1} z {numberOfFlashcardsToPractice}";
             flashcardIndexLabel.IsVisible = true;
@@ -224,6 +254,7 @@ public partial class MainPage : ContentPage
         {
             scoreLabel.Text =
                 $"Score: {correctAnswers}/{numberOfFlashcardsToPractice} ({correctAnswers / (double)numberOfFlashcardsToPractice * 100}%)";
+            scoreLabel.IsVisible = true; // Pokaż etykietę wyniku
             resetButton.IsVisible = true; // Pokaż przycisk resetowania
             welcomeLabel.Text = "Zakończono trening!"; // Zmień tytuł
             flashcardLabel.Text = string.Empty; // Ukryj tekst fiszki
@@ -303,52 +334,6 @@ public partial class MainPage : ContentPage
         ShowNextFlashcard();
     }
 
-    private void AddNewFlashcard(Flashcard newFlashcard)
-    {
-        flashcards.Add(newFlashcard);
-        SaveFlashcards();
-    }
-
-    private void UpdateSettings(Settings newSettings)
-    {
-        settings = newSettings;
-        SaveSettings();
-    }
-
-    private void SaveFlashcards()
-    {
-        try
-        {
-            string filePath = Path.Combine(FileSystem.AppDataDirectory,
-                "flashcards.json");
-            FlashcardsContainer flashcardsContainer =
-                new() { Flashcards = flashcards };
-            string json = JsonSerializer.Serialize(flashcardsContainer);
-            File.WriteAllText(filePath, json);
-            Debug.WriteLine("Flashcards successfully saved.");
-        }
-        catch (Exception ex)
-        {
-            Debug.WriteLine($"Error saving flashcards: {ex.Message}");
-        }
-    }
-
-    private void SaveSettings()
-    {
-        try
-        {
-            string filePath = Path.Combine(FileSystem.AppDataDirectory,
-                "settings.json");
-            string json = JsonSerializer.Serialize(settings);
-            File.WriteAllText(filePath, json);
-            Debug.WriteLine("Settings successfully saved.");
-        }
-        catch (Exception ex)
-        {
-            Debug.WriteLine($"Error saving settings: {ex.Message}");
-        }
-    }
-
     private void OnResetTrainingClicked(object sender, EventArgs e)
     {
         languagePicker.IsVisible = true;
@@ -361,6 +346,7 @@ public partial class MainPage : ContentPage
         currentFlashcardIndex = 0;
         correctAnswers = 0;
         scoreLabel.Text = string.Empty;
+        scoreLabel.IsVisible = false; // Ukryj etykietę wyniku
         flashcardLabel.Text = string.Empty;
         hintLabel.Text = string.Empty;
         hintLabel.IsVisible = false;
@@ -371,5 +357,13 @@ public partial class MainPage : ContentPage
 
         // Resetuj wybór języka początkowego
         languagePicker.SelectedIndex = -1;
+
+        // Pokaż suwak i jego etykietę ponownie, jeśli opcja UseDefaultNumberOfFlashcards jest wyłączona
+        if (!settings.UseDefaultNumberOfFlashcards)
+        {
+            numberOfFlashcardsSlider.IsVisible = true;
+            sliderValueLabel.IsVisible = true;
+            numberOfFlashcardsLabel.IsVisible = true; // Pokaż etykietę suwaka
+        }
     }
 }
